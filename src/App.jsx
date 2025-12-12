@@ -1,11 +1,11 @@
 import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <HomePage />
+      <SearchResults />
     </div>
   );
 }
