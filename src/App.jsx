@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import SearchResults from './pages/SearchResults';
 import MovieDetails from './pages/MovieDetails';
 import StatsPage from './pages/StatsPage';
+import WatchlistPage from './pages/WatchlistPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/list/:listName" element={<WatchlistPage />} />
         </Routes>
       </div>
     </Router>

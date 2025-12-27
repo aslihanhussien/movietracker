@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAllMoviesCount } from '../utils/localStorage';
 
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [counts, setCounts] = useState({ wantToWatch: 0, watched: 0, favorites: 0 });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCounts(getAllMoviesCount());
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -49,10 +55,13 @@ function HomePage() {
             </svg>
           </div>
           <h3 className="text-center font-semibold text-gray-900 mb-2">Want to watch</h3>
-          <p className="text-center text-3xl font-bold text-blue-600 mb-4">12</p>
-          <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-            View
-          </button>
+          <p className="text-center text-3xl font-bold text-blue-600 mb-4">{counts.wantToWatch}</p>
+          <button 
+  onClick={() => navigate('/list/want-to-watch')}
+  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium"
+>
+  View
+</button>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 border-2 border-green-200">
@@ -62,10 +71,13 @@ function HomePage() {
             </svg>
           </div>
           <h3 className="text-center font-semibold text-gray-900 mb-2">Watched</h3>
-          <p className="text-center text-3xl font-bold text-green-600 mb-4">32</p>
-          <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-medium">
-            View
-          </button>
+          <p className="text-center text-3xl font-bold text-green-600 mb-4">{counts.watched}</p>
+         <button 
+  onClick={() => navigate('/list/watched')}
+  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-medium"
+>
+  View
+</button>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 border-2 border-red-200">
@@ -75,10 +87,13 @@ function HomePage() {
             </svg>
           </div>
           <h3 className="text-center font-semibold text-gray-900 mb-2">Favorites</h3>
-          <p className="text-center text-3xl font-bold text-red-600 mb-4">20</p>
-          <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-medium">
-            View
-          </button>
+          <p className="text-center text-3xl font-bold text-red-600 mb-4">{counts.favorites}</p>
+          <button 
+  onClick={() => navigate('/list/favorites')}
+  className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-medium"
+>
+  View
+</button>
         </div>
       </div>
     </div>
