@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMovieDetails } from '../services/api';
+import { addMovieToList, removeMovieFromList, isMovieInList } from '../utils/localStorage';
 
 function MovieDetails() {
   const { id } = useParams();
@@ -8,12 +9,18 @@ function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [inWantToWatch, setInWantToWatch] = useState(false);
+  const [inWatched, setInWatched] = useState(false);
+  const [inFavorites, setInFavorites] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const data = await getMovieDetails(id);
         setMovie(data);
+        setInWantToWatch(isMovieInList('WANT_TO_WATCH', id));
+        setInWatched(isMovieInList('WATCHED', id));
+        setInFavorites(isMovieInList('FAVORITES', id));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -23,6 +30,22 @@ function MovieDetails() {
 
     fetchMovie();
   }, [id]);
+
+  const handleAddToList = (listName) => {
+    if (!movie) return;
+
+    const isInList = isMovieInList(listName, movie.imdbID);
+    
+    if (isInList) {
+      removeMovieFromList(listName, movie.imdbID);
+    } else {
+      addMovieToList(listName, movie);
+    }
+
+    setInWantToWatch(isMovieInList('WANT_TO_WATCH', movie.imdbID));
+    setInWatched(isMovieInList('WATCHED', movie.imdbID));
+    setInFavorites(isMovieInList('FAVORITES', movie.imdbID));
+  };
 
   if (loading) {
     return (
@@ -115,23 +138,35 @@ function MovieDetails() {
             </div>
 
             <div className="flex gap-3 mt-8">
-              <button className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition font-medium flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-                </svg>
-                Want to Watch
+              <button 
+                onClick={() => handleAddToList('WANT_TO_WATCH')}
+                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                  inWantToWatch 
+                    ? 'bg-blue-700 text-white' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                {inWantToWatch ? '✓ ' : ''}Want to Watch
               </button>
-              <button className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition font-medium flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                Watched
+              <button 
+                onClick={() => handleAddToList('WATCHED')}
+                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                  inWatched 
+                    ? 'bg-green-700 text-white' 
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+              >
+                {inWatched ? '✓ ' : ''}Watched
               </button>
-              <button className="flex-1 bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition font-medium flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
-                </svg>
-                Favorite
+              <button 
+                onClick={() => handleAddToList('FAVORITES')}
+                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                  inFavorites 
+                    ? 'bg-red-700 text-white' 
+                    : 'bg-red-600 text-white hover:bg-red-700'
+                }`}
+              >
+                {inFavorites ? '❤ ' : ''}Favorite
               </button>
             </div>
           </div>
