@@ -1,7 +1,15 @@
-function MovieCard({ movie, onMovieClick }) {
+import { useNavigate } from 'react-router-dom';
+
+function MovieCard({ movie }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/movie/${movie.imdbID}`);
+  };
+
   return (
     <div 
-      onClick={() => onMovieClick(movie.imdbID)}
+      onClick={handleClick}
       className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition border-2 border-gray-200 hover:border-blue-400"
     >
       <div className="aspect-[2/3] bg-gray-200 flex items-center justify-center">
@@ -20,26 +28,6 @@ function MovieCard({ movie, onMovieClick }) {
       <div className="p-4">
         <h3 className="font-semibold text-gray-900 mb-1 truncate">{movie.Title}</h3>
         <p className="text-gray-600 text-sm">{movie.Year}</p>
-        <div className="flex gap-2 mt-3">
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('Add to list:', movie.Title);
-            }}
-            className="flex-1 bg-blue-600 text-white text-sm py-1 rounded hover:bg-blue-700 transition"
-          >
-            ✓
-          </button>
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('Remove:', movie.Title);
-            }}
-            className="flex-1 bg-gray-300 text-gray-700 text-sm py-1 rounded hover:bg-gray-400 transition"
-          >
-            ✗
-          </button>
-        </div>
       </div>
     </div>
   );

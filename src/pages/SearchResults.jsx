@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../services/api';
 import SearchBar from '../components/SearchBar';
 import MovieCard from '../components/MovieCard';
 
 function SearchResults() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const query = searchParams.get('q');
+    if (query) {
+      setSearchQuery(query);
+      handleSearch(query);
+    }
+  }, [searchParams]);
 
   const handleSearch = async (query) => {
     setLoading(true);
@@ -16,6 +26,7 @@ function SearchResults() {
     try {
       const results = await searchMovies(query);
       setMovies(results);
+      setSearchParams({ q: query });
     } catch (err) {
       setError(err.message);
       setMovies([]);
@@ -24,14 +35,14 @@ function SearchResults() {
     }
   };
 
-  const handleMovieClick = (movieId) => {
-    console.log('Movie clicked:', movieId);
+  const onSearch = (query) => {
+    handleSearch(query);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <SearchBar 
-        onSearch={handleSearch}
+        onSearch={onSearch}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -54,7 +65,6 @@ function SearchResults() {
             <MovieCard 
               key={movie.imdbID} 
               movie={movie}
-              onMovieClick={handleMovieClick}
             />
           ))}
         </div>

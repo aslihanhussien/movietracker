@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${searchQuery}`);
+    }
   };
 
   return (
