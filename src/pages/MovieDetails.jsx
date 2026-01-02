@@ -137,10 +137,10 @@ function MovieDetails() {
               <p className="text-gray-700">{movie.Released}</p>
             </div>
 
-            <div className="flex gap-3 mt-8">
+            <div className="flex flex-col sm:flex-row gap-3 mt-8">
               <button 
                 onClick={() => handleAddToList('WANT_TO_WATCH')}
-                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                className={`flex-1 py-3 px-4 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
                   inWantToWatch 
                     ? 'bg-blue-700 text-white' 
                     : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -150,7 +150,7 @@ function MovieDetails() {
               </button>
               <button 
                 onClick={() => handleAddToList('WATCHED')}
-                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                className={`flex-1 py-3 px-4 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
                   inWatched 
                     ? 'bg-green-700 text-white' 
                     : 'bg-green-600 text-white hover:bg-green-700'
@@ -160,7 +160,7 @@ function MovieDetails() {
               </button>
               <button 
                 onClick={() => handleAddToList('FAVORITES')}
-                className={`flex-1 py-3 px-6 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
+                className={`flex-1 py-3 px-4 rounded-lg transition font-medium flex items-center justify-center gap-2 ${
                   inFavorites 
                     ? 'bg-red-700 text-white' 
                     : 'bg-red-600 text-white hover:bg-red-700'

@@ -25,9 +25,9 @@ function MovieCard({ movie }) {
           </svg>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-1 truncate">{movie.Title}</h3>
-        <p className="text-gray-600 text-sm">{movie.Year}</p>
+      <div className="p-3">
+        <h3 className="font-semibold text-gray-900 mb-1 truncate text-sm">{movie.Title}</h3>
+        <p className="text-gray-600 text-xs">{movie.Year}</p>
       </div>
     </div>
   );
